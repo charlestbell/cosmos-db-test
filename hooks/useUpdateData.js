@@ -1,6 +1,6 @@
 import "react-native-get-random-values";
 // import { COSMOS_KEY, COSMOS_ENDPOINT, COSMOS_DATABASE_ID } from "@env";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 const CosmosClient = require("@azure/cosmos").CosmosClient;
 
 const endpoint = "https://logbook-apps.documents.azure.com:443/";
@@ -13,20 +13,18 @@ const containerId = "families";
 // console.log("COSMOS_ENDPOINT", COSMOS_ENDPOINT);
 // console.log("COSMOS_DATABASE_ID", COSMOS_DATABASE_ID);
 
-const query = async () => {
+const mutation = async () => {
   const client = new CosmosClient({ endpoint, key });
 
   let loadedToDos;
 
-  const querySpec = {
-    query: "SELECT * from c",
-  };
+  const operations = [{ op: "replace", path: "/lastName", value: "Martin!" }];
 
   const response = await client
     .database(databaseId)
     .container(containerId)
-    .items.query(querySpec)
-    .fetchAll();
+    .item((id = "AndersenFamily"), (partitionKeyValue = "AndersenFamily"))
+    .patch(operations);
 
   // response.resources.forEach((logbook) =>
   //   loadedToDos.push(
@@ -39,11 +37,11 @@ const query = async () => {
   //     )
   //   )
   // );
-  // console.log("LOADED TODOS ", response);
+  console.log("LOADED TODOS ", response);
   return response;
 };
 
-const useToDos = () => {
-  return useQuery("todos", () => query());
+const useUpdateData = () => {
+  return useMutation("todos", () => mutation());
 };
-export default useToDos;
+export default useUpdateData;
