@@ -9,10 +9,6 @@ const key =
 const databaseId = "Families";
 const containerId = "families";
 
-// console.log("COSMOS_KEY", COSMOS_KEY);
-// console.log("COSMOS_ENDPOINT", COSMOS_ENDPOINT);
-// console.log("COSMOS_DATABASE_ID", COSMOS_DATABASE_ID);
-
 const mutation = async () => {
   const client = new CosmosClient({ endpoint, key });
 
@@ -26,17 +22,6 @@ const mutation = async () => {
     .item((id = "AndersenFamily"), (partitionKeyValue = "AndersenFamily"))
     .patch(operations);
 
-  // response.resources.forEach((logbook) =>
-  //   loadedToDos.push(
-  //     new Logbook(
-  //       logbook.id,
-  //       logbook.date,
-  //       logbook.title,
-  //       logbook.description,
-  //       logbook.imageUri
-  //     )
-  //   )
-  // );
   console.log("LOADED TODOS ", response);
   return response;
 };
